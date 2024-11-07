@@ -1,7 +1,5 @@
-export default function Transactions() {
-  return (
-    <div>
-      <h1>Transactions</h1>
-    </div>
-  );
+const TransactionsPage = () => {
+  return ( <h1>TransactionsPage</h1> );
 }
+ 
+export default TransactionsPage;
