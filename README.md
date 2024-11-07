@@ -39,3 +39,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Ferramentas:
 Prisma ORM
 Neon hospedagem de banco de dados
+Cleark para autenticação
