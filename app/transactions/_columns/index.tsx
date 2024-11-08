@@ -14,30 +14,30 @@ import EditTransactionButton from "../_components/edit-transaction-button";
 export const transactionColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "name",
-    header: "Nome",
+    header: () => <span className="font-bold">Nome</span>,
   },
   {
     accessorKey: "type",
-    header: "Tipo",
+    header: () => <span className="font-bold text-lg">Tipo</span>,
     cell: ({ row: { original: transaction } }) => (
       <TransactionTypeBadge transaction={transaction} />
     ),
   },
   {
     accessorKey: "category",
-    header: "Categoria",
+    header: () => <span className="font-bold">Categoria</span>,
     cell: ({ row: { original: transaction } }) =>
       TRANSACTION_CATEGORY_LABELS[transaction.category],
   },
   {
     accessorKey: "paymentMethod",
-    header: "Método de Pagamento",
+    header: () => <span className="font-bold">Método de Pagamento</span>,
     cell: ({ row: { original: transaction } }) =>
       TRANSACTION_PAYMENT_METHOD_LABELS[transaction.paymentMethod],
   },
   {
     accessorKey: "date",
-    header: "Data",
+    header: () => <span className="font-bold">Data</span>,
     cell: ({ row: { original: transaction } }) =>
       new Date(transaction.date).toLocaleDateString("pt-BR", {
         day: "2-digit",
@@ -47,7 +47,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "amount",
-    header: "Valor",
+    header: () => <span className="font-bold">Valor</span>,
     cell: ({ row: { original: transaction } }) =>
       new Intl.NumberFormat("pt-BR", {
         style: "currency",
@@ -56,7 +56,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "actions",
-    header: "Ações",
+    header: () => <span className="font-bold">Ações</span>,
     cell: ({ row: { original: transaction } }) => {
       return (
         <div className="space-x-1">
