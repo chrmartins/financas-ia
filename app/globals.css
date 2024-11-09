@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -14,57 +21,62 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: transparent; /* Adjusted to be transparent */
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 102 59% 44%; /* Adjusted for #55B02E */
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0 100%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 102 59% 44%; /* Adjusted for #55B02E */
+    --background: 260 20% 98%; /* Fundo claro com tom lilás suave */
+    --foreground: 260 15% 10%; /* Texto em tom roxo escuro */
+    --card: 0 0% 100%; /* Fundo branco para cartões */
+    --card-foreground: 260 15% 10%; /* Texto nos cartões */
+    --popover: 260 20% 98%; /* Fundo suave lilás */
+    --popover-foreground: 260 15% 10%;
+    --primary: 102 59% 44%; /* Verde mantido para ações principais */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 25% 88%; /* Lilás claro */
+    --secondary-foreground: 260 30% 20%; /* Texto em lilás escuro */
+    --muted: 260 20% 90%; /* Cinza-lilás neutro */
+    --muted-foreground: 260 10% 40%;
+    --accent: 260 25% 80%; /* Lilás médio para destaques */
+    --accent-foreground: 260 20% 15%; /* Texto roxo escuro */
+    --destructive: 0 70% 50%; /* Vermelho para ações destrutivas */
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 20% 85%; /* Borda lilás neutro */
+    --input: 260 20% 85%; /* Input neutro lilás */
+    --ring: 102 59% 44%; /* Verde para foco */
     --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+
+    /* Gráficos */
+    --chart-1: 102 59% 44%; /* Verde para gráficos principais */
+    --chart-2: 260 40% 50%; /* Roxo médio */
+    --chart-3: 340 80% 55%; /* Rosa vibrante */
+    --chart-4: 280 65% 60%; /* Lilás mais claro */
+    --chart-5: 30 80% 55%; /* Amarelo para contraste */
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: transparent; /* Adjusted to be transparent */
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
+    --background: 260 25% 10%; /* Fundo roxo escuro */
+    --foreground: 0 0% 95%; /* Texto claro */
+    --card: 260 25% 15%; /* Fundo escuro para cartões */
+    --card-foreground: 0 0% 95%; 
+    --popover: 260 25% 15%; /* Fundo escuro lilás */
     --popover-foreground: 0 0% 95%;
-    --primary: 102 59% 44%; /* Adjusted for #55B02E */
-    --primary-foreground: 0 0 100% --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 102 59% 44%; /* Adjusted for #55B02E */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --primary: 102 59% 44%; /* Verde */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 30% 20%; /* Lilás escuro */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 260 25% 12%; /* Roxo escuro para fundos neutros */
+    --muted-foreground: 0 0% 70%; /* Texto neutro claro */
+    --accent: 280 25% 20%; /* Lilás escuro */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 50% 40%; /* Vermelho escuro */
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 20% 20%; /* Borda cinza escuro */
+    --input: 260 20% 20%; 
+    --ring: 102 59% 44%; /* Verde */
+
+    /* Gráficos */
+    --chart-1: 102 59% 44%;
+    --chart-2: 260 40% 50%; /* Roxo médio */
+    --chart-3: 340 80% 55%; /* Rosa */
+    --chart-4: 280 65% 60%; /* Lilás */
+    --chart-5: 30 80% 55%; /* Amarelo */
   }
 }
 
