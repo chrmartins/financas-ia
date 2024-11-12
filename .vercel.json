@@ -1,0 +1,5 @@
+{
+    "buildCommand": "SKIP_LINT=true NEXT_SKIP_LINT=1 next build",
+    "installCommand": "npm install",
+    "framework": "nextjs"
+  }
