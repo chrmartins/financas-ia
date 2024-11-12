@@ -21,7 +21,7 @@ const SubscriptionPage = async () => {
       <div className="space-y-6 p-6">
         <h1 className="text-2xl font-bold">Assinatura</h1>
 
-        <div className="flex gap-6">
+        <div className="flex justify-center gap-6">
           <Card className="w-[450px]">
             <CardHeader className="border-b border-solid py-8">
               <h2 className="text-center text-2xl font-semibold">

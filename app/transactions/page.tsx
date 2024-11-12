@@ -28,8 +28,11 @@ const TransactionsPage = async () => {
           <h1 className="text-2xl font-bold">Transações</h1>
           <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
         </div>
-        <ScrollArea>
-          <DataTable columns={transactionColumns} data={transactions} />
+        <ScrollArea className="overflow-auto">
+          <DataTable 
+            columns={transactionColumns} 
+            data={JSON.parse(JSON.stringify(transactions))} 
+          />
         </ScrollArea>
       </div>
     </>
