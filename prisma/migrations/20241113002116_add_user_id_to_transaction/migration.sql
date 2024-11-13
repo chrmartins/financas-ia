@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "Transaction" ADD COLUMN "userId" TEXT NOT NULL DEFAULT 'temp-user-id';
+ALTER TABLE "Transaction" ALTER COLUMN "userId" DROP DEFAULT;
