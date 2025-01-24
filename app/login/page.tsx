@@ -23,7 +23,7 @@ const LoginPage = async () => {
           facilitando o controle do seu orçamento.
         </p>
         <SignInButton>
-          <Button className="p-8 border-green-400" variant="outline">
+          <Button className="p-8 border-green-400 rounded-full" variant="outline">
             <LogInIcon className="mr-2" />
             Fazer login ou criar conta
           </Button>
