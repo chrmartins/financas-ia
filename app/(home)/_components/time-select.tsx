@@ -8,36 +8,60 @@ import {
   SelectValue,
 } from "@/app/_components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const MONTH_OPTIONS = [
-  { value: "01", label: "January" },
-  { value: "02", label: "February" },
-  { value: "03", label: "March" },
-  { value: "04", label: "April" },
-  { value: "05", label: "May" },
-  { value: "06", label: "June" },
-  { value: "07", label: "July" },
-  { value: "08", label: "August" },
-  { value: "09", label: "September" },
-  { value: "10", label: "October" },
-  { value: "11", label: "November" },
-  { value: "12", label: "December" },
+  { value: "01", label: "Janeiro" },
+  { value: "02", label: "Fevereiro" },
+  { value: "03", label: "Março" },
+  { value: "04", label: "Abril" },
+  { value: "05", label: "Maio" },
+  { value: "06", label: "Junho" },
+  { value: "07", label: "Julho" },
+  { value: "08", label: "Agosto" },
+  { value: "09", label: "Setembro" },
+  { value: "10", label: "Outubro" },
+  { value: "11", label: "Novembro" },
+  { value: "12", label: "Dezembro" },
 ];
 
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
-  const month = searchParams.get("month");
+  const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
+  
+  // Inicializa com um valor garantido
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    const urlMonth = searchParams.get("month");
+    return urlMonth || currentMonth;
+  });
+  
+  // Executa apenas uma vez na montagem
+  useEffect(() => {
+    if (!searchParams.get("month")) {
+      setSelectedMonth(currentMonth);
+      push(`/?month=${currentMonth}`, { scroll: false });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleMonthChange = (month: string) => {
-    push(`/?month=${month}`);
+    setSelectedMonth(month);
+    push(`/?month=${month}`, { scroll: false });
   };
+
+  // Garante que sempre teremos um valor para exibir
+  const displayValue = MONTH_OPTIONS.find(option => option.value === selectedMonth)?.label;
+
   return (
     <Select
-      onValueChange={(value) => handleMonthChange(value)}
-      defaultValue={month ?? ""}
+      value={selectedMonth}
+      onValueChange={handleMonthChange}
     >
       <SelectTrigger className="w-[150px] rounded-full">
-        <SelectValue placeholder="Mês" />
+        <SelectValue>
+          {displayValue || MONTH_OPTIONS[Number(currentMonth) - 1].label}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {MONTH_OPTIONS.map((option) => (
