@@ -11,11 +11,13 @@ import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
 
-export default async function Home({
-  searchParams = {},
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+// Definindo o tipo correto para searchParams no Next.js 15
+type SearchParamsType = Promise<{ [key: string]: string | string[] | undefined }>;
+
+// Componente principal da página
+export default async function Home(props: { searchParams: SearchParamsType }) {
+  const searchParams = await props.searchParams;
+  
   const month = searchParams.month as string;
   const authResult = await auth();
   
