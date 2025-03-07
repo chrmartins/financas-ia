@@ -12,9 +12,11 @@ import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
 import { SerializedTransaction } from "../_types/transaction";
 
-type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+// Update the Props type
+interface Props {
+  params: Record<string, never>;
+  searchParams: Record<string, string | string[] | undefined>;
+}
 
 const Home = async ({ searchParams }: Props) => {
   const month = searchParams.month as string;
