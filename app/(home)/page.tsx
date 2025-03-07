@@ -13,16 +13,14 @@ import AiReportButton from "./_components/ai-report-button";
 import { SerializedTransaction } from "../_types/transaction";
 
 type Props = {
-  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const Home = async ({ searchParams }: Props) => {
   const month = searchParams.month as string;
-  const session = await auth();
-  const userId = session?.userId;
-
-  if (!userId) {
+  const authResult = await auth();
+  
+  if (!authResult?.userId) {
     redirect("/login");
   }
 
