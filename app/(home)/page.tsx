@@ -13,13 +13,14 @@ import AiReportButton from "./_components/ai-report-button";
 import { SerializedTransaction } from "../_types/transaction";
 
 // Update the Props type
+type SearchParams = { [key: string]: string | undefined };
+
 interface Props {
-  params: Record<string, never>;
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: SearchParams;
 }
 
 const Home = async ({ searchParams }: Props) => {
-  const month = searchParams.month as string;
+  const month = searchParams.month;
   const authResult = await auth();
   
   if (!authResult?.userId) {
