@@ -10,17 +10,13 @@ import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
-import { SerializedTransaction } from "../_types/transaction";
 
-// Update the Props type
-type SearchParams = { [key: string]: string | undefined };
-
-interface Props {
-  searchParams: SearchParams;
-}
-
-const Home = async ({ searchParams }: Props) => {
-  const month = searchParams.month;
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const month = searchParams.month as string;
   const authResult = await auth();
   
   if (!authResult?.userId) {
@@ -37,15 +33,6 @@ const Home = async ({ searchParams }: Props) => {
   const dashboard = await getDashboard(validMonth);
   const userCanAddTransaction = await canUserAddTransaction();
   const isPremium = true;
-
-  // Serialize the transactions - simplified to avoid instanceof check
-  const serializedTransactions: SerializedTransaction[] = dashboard.lastTransactions.map(transaction => ({
-    ...transaction,
-    amount: Number(transaction.amount), // Simply convert to number
-    date: new Date(transaction.date).toISOString(),
-    createdAt: new Date(transaction.createdAt).toISOString(),
-    updatedAt: new Date(transaction.updatedAt).toISOString(),
-  }));
 
   return (
     <>
@@ -72,11 +59,9 @@ const Home = async ({ searchParams }: Props) => {
               />
             </div>
           </div>
-          <LastTransactions lastTransactions={serializedTransactions} />
+          <LastTransactions lastTransactions={dashboard.lastTransactions} />
         </div>
       </div>
     </>
   );
-};
-
-export default Home;
+}
