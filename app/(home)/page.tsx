@@ -11,12 +11,11 @@ import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
 
-type PageProps = {
-  params: { [key: string]: string | string[] | undefined }
-  searchParams?: { [key: string]: string | string[] | undefined }
-}
-
-export default async function Home({ searchParams = {} }: PageProps) {
+export default async function Home({
+  searchParams = {},
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const month = searchParams.month as string;
   const authResult = await auth();
   
