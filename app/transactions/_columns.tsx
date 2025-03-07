@@ -1,22 +1,11 @@
+"use client";
+
 import { ColumnDef } from "@tanstack/react-table";
-import { TransactionType, TransactionCategory, TransactionPaymentMethod } from "@prisma/client";
+import { TransactionType } from "@prisma/client";
 import { formatCurrency } from "../_utils/currency";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-// Define a type for serialized transactions
-interface SerializedTransaction {
-  id: string;
-  type: TransactionType;
-  name: string;
-  date: string; // Changed from Date to string
-  amount: number; // Changed from Decimal to number
-  category: TransactionCategory;
-  paymentMethod: TransactionPaymentMethod;
-  createdAt: string; // Changed from Date to string
-  updatedAt: string; // Changed from Date to string
-  userId: string;
-}
+import { SerializedTransaction } from "../_types/transaction";
 
 export const transactionColumns: ColumnDef<SerializedTransaction>[] = [
   {
@@ -43,7 +32,6 @@ export const transactionColumns: ColumnDef<SerializedTransaction>[] = [
     accessorKey: "date",
     header: "Data",
     cell: ({ row }) => {
-      // Parse the ISO string to a Date object
       const date = new Date(row.getValue("date") as string);
       return format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
     },
@@ -52,7 +40,7 @@ export const transactionColumns: ColumnDef<SerializedTransaction>[] = [
     accessorKey: "amount",
     header: "Valor",
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount") as string);
+      const amount = row.getValue("amount") as number;
       const type = row.getValue("type") as TransactionType;
       
       const formatted = formatCurrency(amount);

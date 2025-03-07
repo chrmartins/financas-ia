@@ -1,8 +1,9 @@
 "use server";
-import { db } from "@/app/_lib/prisma";
+import { prisma } from "@/app/_lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { isMatch } from "date-fns";
 import OpenAI from "openai";
+import { endOfMonth, startOfMonth } from "date-fns";
 
 export const generateAiReport = async (month: string) => {
   if (!isMatch(month, "MM")) {
@@ -22,11 +23,12 @@ export const generateAiReport = async (month: string) => {
 
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  const transactions = await db.transaction.findMany({
+  const transactions = await prisma.transaction.findMany({
     where: {
+      userId,
       date: {
-        gte: new Date(`2024-${month}-01`),
-        lt: new Date(`2024-${month}-31`),
+        gte: startOfMonth(new Date(`${new Date().getFullYear()}-${month}-01`)),
+        lte: endOfMonth(new Date(`${new Date().getFullYear()}-${month}-01`)),
       },
     },
   });

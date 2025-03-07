@@ -2,13 +2,13 @@ import { TransactionType, TransactionCategory, TransactionPaymentMethod } from "
 
 export interface SerializedTransaction {
   id: string;
-  userId: string;
-  name: string;
   type: TransactionType;
+  name: string;
+  date: string;
   amount: number;
   category: TransactionCategory;
   paymentMethod: TransactionPaymentMethod;
-  date: string;
   createdAt: string;
   updatedAt: string;
+  userId: string;
 }

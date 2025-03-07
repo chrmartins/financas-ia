@@ -10,7 +10,7 @@ import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
-import { TransactionType, TransactionCategory, TransactionPaymentMethod } from "@prisma/client";
+import { SerializedTransaction } from "../_types/transaction";
 
 interface HomeProps {
   searchParams: {
@@ -18,21 +18,10 @@ interface HomeProps {
   };
 }
 
-interface SerializedTransaction {
-  id: string;
-  userId: string;
-  name: string;
-  type: TransactionType;
-  amount: number;
-  category: TransactionCategory;
-  paymentMethod: TransactionPaymentMethod;
-  date: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const Home = async ({ searchParams: { month } }: HomeProps) => {
+const Home = async (props: HomeProps) => {
+  const month = props.searchParams.month;
   const { userId } = await auth();
+
   if (!userId) {
     redirect("/login");
   }

@@ -26,21 +26,19 @@ const AddTransactionButton = ({
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div>
-              <Button
-                className="rounded-full font-bold"
-                onClick={() => setDialogIsOpen(true)}
-                disabled={!userCanAddTransaction}
-              >
-                {userCanAddTransaction 
-                  ? "Adicionar transação" 
-                  : "Limite atingido"}
-                <ArrowDownUpIcon className="ml-2" />
-              </Button>
-            </div>
+            <Button
+              className="rounded-full font-bold"
+              onClick={() => setDialogIsOpen(true)}
+              disabled={!userCanAddTransaction}
+            >
+              {userCanAddTransaction 
+                ? "Adicionar transação" 
+                : "Limite atingido"}
+              <ArrowDownUpIcon className="ml-2" />
+            </Button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="max-w-[280px] p-4">
-            {!userCanAddTransaction ? (
+          <TooltipContent side="bottom" className="w-[280px] p-4">
+            {!userCanAddTransaction && (
               <div className="text-center">
                 <p className="font-semibold">Limite de transações atingido</p>
                 <p className="mt-2 text-sm text-muted-foreground">
@@ -53,13 +51,6 @@ const AddTransactionButton = ({
                 >
                   Fazer upgrade para Premium
                 </Link>
-              </div>
-            ) : (
-              <div>
-                <p>Adicionar nova transação</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Registre suas receitas, despesas e investimentos.
-                </p>
               </div>
             )}
           </TooltipContent>
