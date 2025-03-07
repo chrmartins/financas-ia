@@ -1,31 +1,42 @@
-import { db } from "@/app/_lib/prisma";
+import { prisma } from "@/app/_lib/prisma";
 import { TransactionType } from "@prisma/client";
 import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { auth } from "@clerk/nextjs/server";
+import { startOfMonth, endOfMonth } from "date-fns";
 
 export const getDashboard = async (month: string) => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
+
+  // Usar date-fns para calcular corretamente o início e fim do mês
+  const currentYear = new Date().getFullYear();
+  const monthNumber = parseInt(month);
+  const startDate = startOfMonth(new Date(currentYear, monthNumber - 1));
+  const endDate = endOfMonth(new Date(currentYear, monthNumber - 1));
+
+  console.log(`Buscando transações de ${startDate.toISOString()} até ${endDate.toISOString()}`);
+
   const where = {
     userId,
     date: {
-      gte: new Date(`2024-${month}-01`),
-      lt: new Date(`2024-${month}-31`),
+      gte: startDate,
+      lte: endDate,
     },
   };
+  
   const depositsTotal = Number(
     (
-      await db.transaction.aggregate({
+      await prisma.transaction.aggregate({
         where: { ...where, type: "DEPOSIT" },
         _sum: { amount: true },
       })
-    )?._sum?.amount,
+    )?._sum?.amount || 0, // Adicionar fallback para 0
   );
   const investmentsTotal = Number(
     (
-      await db.transaction.aggregate({
+      await prisma.transaction.aggregate({
         where: { ...where, type: "INVESTMENT" },
         _sum: { amount: true },
       })
@@ -33,7 +44,7 @@ export const getDashboard = async (month: string) => {
   );
   const expensesTotal = Number(
     (
-      await db.transaction.aggregate({
+      await prisma.transaction.aggregate({
         where: { ...where, type: "EXPENSE" },
         _sum: { amount: true },
       })
@@ -42,7 +53,7 @@ export const getDashboard = async (month: string) => {
   const balance = depositsTotal - investmentsTotal - expensesTotal;
   const transactionsTotal = Number(
     (
-      await db.transaction.aggregate({
+      await prisma.transaction.aggregate({
         where,
         _sum: { amount: true },
       })
@@ -60,7 +71,7 @@ export const getDashboard = async (month: string) => {
     ),
   };
   const totalExpensePerCategory: TotalExpensePerCategory[] = (
-    await db.transaction.groupBy({
+    await prisma.transaction.groupBy({
       by: ["category"],
       where: {
         ...where,
@@ -77,11 +88,21 @@ export const getDashboard = async (month: string) => {
       (Number(category._sum.amount) / Number(expensesTotal)) * 100,
     ),
   }));
-  const lastTransactions = await db.transaction.findMany({
+  const lastTransactions = await prisma.transaction.findMany({
     where,
     orderBy: { date: "desc" },
     take: 15,
   });
+
+  // Serialize the transactions before returning them
+  const serializedTransactions = lastTransactions.map(transaction => ({
+    ...transaction,
+    amount: transaction.amount.toNumber(),
+    createdAt: transaction.createdAt.toISOString(),
+    updatedAt: transaction.updatedAt.toISOString(),
+    date: transaction.date.toISOString(),
+  }));
+
   return {
     balance,
     depositsTotal,
@@ -89,6 +110,6 @@ export const getDashboard = async (month: string) => {
     expensesTotal,
     typesPercentage,
     totalExpensePerCategory,
-    lastTransactions,
+    lastTransactions: serializedTransactions,
   };
 };

@@ -10,6 +10,7 @@ import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
+import { TransactionType, TransactionCategory, TransactionPaymentMethod } from "@prisma/client";
 
 interface HomeProps {
   searchParams: {
@@ -17,17 +18,45 @@ interface HomeProps {
   };
 }
 
+interface SerializedTransaction {
+  id: string;
+  userId: string;
+  name: string;
+  type: TransactionType;
+  amount: number;
+  category: TransactionCategory;
+  paymentMethod: TransactionPaymentMethod;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const Home = async ({ searchParams: { month } }: HomeProps) => {
   const { userId } = await auth();
   if (!userId) {
     redirect("/login");
   }
-  const monthIsInvalid = !month || !isMatch(month, "MM");
-  if (monthIsInvalid) {
-    redirect(`?month=${new Date().getMonth() + 1}`);
+
+  const currentMonth = new Date().getMonth() + 1;
+  const validMonth = month && isMatch(month, "MM") ? month : currentMonth.toString().padStart(2, '0');
+  
+  if (!month || !isMatch(month, "MM")) {
+    redirect(`?month=${validMonth}`);
   }
-  const dashboard = await getDashboard(month);
+
+  const dashboard = await getDashboard(validMonth);
   const userCanAddTransaction = await canUserAddTransaction();
+  const isPremium = true;
+
+  // Serialize the transactions - simplified to avoid instanceof check
+  const serializedTransactions: SerializedTransaction[] = dashboard.lastTransactions.map(transaction => ({
+    ...transaction,
+    amount: Number(transaction.amount), // Simply convert to number
+    date: new Date(transaction.date).toISOString(),
+    createdAt: new Date(transaction.createdAt).toISOString(),
+    updatedAt: new Date(transaction.updatedAt).toISOString(),
+  }));
+
   return (
     <>
       <Navbar />
@@ -35,7 +64,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex gap-3">
-            <AiReportButton month={month} />
+            <AiReportButton month={validMonth} isPremium={isPremium} />
             <TimeSelect />
           </div>
         </div>
@@ -53,7 +82,7 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
               />
             </div>
           </div>
-          <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          <LastTransactions lastTransactions={serializedTransactions} />
         </div>
       </div>
     </>

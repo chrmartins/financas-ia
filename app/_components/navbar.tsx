@@ -2,11 +2,14 @@
 
 import { UserButton } from "@clerk/nextjs";
 import { BarChart } from "lucide-react";
-//import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const Navbar = () => {
+interface NavbarProps {
+  isPremium?: boolean;
+}
+
+const Navbar = ({ isPremium }: NavbarProps) => {
   const pathname = usePathname();
   return (
     <nav className="flex justify-between border-b border-solid px-8 py-4">
@@ -48,7 +51,13 @@ const Navbar = () => {
         </Link>
       </div>
       {/* DIREITA */}
-      <UserButton showName />
+      
+      <div className="flex flex-col items-center gap-1">
+        <UserButton showName />
+        <span className={`text-xs font-semibold ${isPremium ? 'text-primary' : 'text-muted-foreground'}`}>
+          {isPremium ? 'Premium' : 'Básico'}
+        </span>
+      </div>
     </nav>
   );
 };

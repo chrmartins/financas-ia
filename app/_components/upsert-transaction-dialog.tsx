@@ -46,7 +46,7 @@ interface UpsertTransactionDialogProps {
   isOpen: boolean;
   defaultValues?: FormSchema;
   transactionId?: string;
-  setIsOpen: (isOpen: boolean) => void;
+  setIsOpen: (isOpen: boolean, success?: boolean) => void;
 }
 
 const formSchema = z.object({
@@ -97,10 +97,11 @@ const UpsertTransactionDialog = ({
   const onSubmit = async (data: FormSchema) => {
     try {
       await upsertTransaction({ ...data, id: transactionId });
-      setIsOpen(false);
+      setIsOpen(false, true); // Passa true para indicar sucesso
       form.reset();
     } catch (error) {
       console.error(error);
+      setIsOpen(false, false); // Passa false para indicar falha
     }
   };
 
