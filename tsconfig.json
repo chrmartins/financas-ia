@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["next", "react", "@types/node"], // No custom conflicting types
     "lib": [
       "dom",
       "dom.iterable",
