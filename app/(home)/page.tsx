@@ -14,12 +14,12 @@ import { SerializedTransaction } from "../_types/transaction";
 
 interface HomeProps {
   searchParams: {
-    month: string;
+    month?: string;
   };
 }
 
-const Home = async (props: HomeProps) => {
-  const month = props.searchParams.month;
+const Home = async ({ searchParams }: HomeProps) => {
+  const month = searchParams.month;
   const { userId } = await auth();
 
   if (!userId) {
