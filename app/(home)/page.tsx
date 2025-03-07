@@ -12,15 +12,15 @@ import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import AiReportButton from "./_components/ai-report-button";
 import { SerializedTransaction } from "../_types/transaction";
 
-interface HomeProps {
-  searchParams: {
-    month?: string;
-  };
-}
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-const Home = async ({ searchParams }: HomeProps) => {
-  const month = searchParams.month;
-  const { userId } = await auth();
+const Home = async ({ searchParams }: Props) => {
+  const month = searchParams.month as string;
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     redirect("/login");

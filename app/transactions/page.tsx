@@ -10,7 +10,9 @@ import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 import { SerializedTransaction } from "../_types/transaction";
 
 const TransactionsPage = async () => {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.userId;
+
   if (!userId) {
     redirect("/login");
   }
