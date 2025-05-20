@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/app/_components/ui/button";
-import { loadStripe } from "@stripe/stripe-js";
+import { Button } from "@/shared/components/ui/button";
 import { useUser } from "@clerk/nextjs";
-import { createStripeCheckout } from "../_actions/create-stripe-checkout";
+import { loadStripe } from "@stripe/stripe-js";
 import Link from "next/link";
+import { createStripeCheckout } from "../_actions/create-stripe-checkout";
 
 const AcquirePlanButton = () => {
   const { user } = useUser();

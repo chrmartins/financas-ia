@@ -1,8 +1,9 @@
+import { SuppressHydrationWarning } from "@/shared/components/suppress-hydration-warning";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 
 const mulish = Mulish({
   subsets: ["latin-ext"],
@@ -19,14 +20,21 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${mulish.className} dark antialiased`}>
+    <html lang="en" suppressHydrationWarning={true}>
+      <body
+        className={`${mulish.className} dark antialiased`}
+        suppressHydrationWarning={true}
+      >
         <ClerkProvider
           appearance={{
             baseTheme: dark,
           }}
         >
-          <div className="flex h-full flex-col overflow-hidden">{children}</div>
+          <SuppressHydrationWarning>
+            <div className="flex h-full flex-col overflow-hidden">
+              {children}
+            </div>
+          </SuppressHydrationWarning>
         </ClerkProvider>
       </body>
     </html>

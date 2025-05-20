@@ -4,17 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:fast": "./start-optimized.sh",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky && prisma generate"
+    "prepare": "husky && prisma generate",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.5",
     "@clerk/themes": "^2.1.37",
     "@hookform/resolvers": "^3.9.1",
     "@prisma/client": "^5.21.1",
-    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-alert-dialog": "^1.1.13",
+    "@radix-ui/react-dialog": "^1.1.13",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-progress": "^1.1.0",
@@ -26,7 +29,7 @@
     "@stripe/stripe-js": "^4.9.0",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/react-table": "^8.20.5",
-    "class-variance-authority": "^0.7.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "git-commit-msg-linter": "^5.0.8",

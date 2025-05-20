@@ -1,23 +1,23 @@
+import Navbar from "@/shared/components/navbar";
+import { Badge } from "@/shared/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
+import { getCurrentMonthTransactions } from "@/shared/data/get-current-month-transactions";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import Navbar from "../_components/navbar";
-import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader } from "../_components/ui/card";
 import { CheckIcon, XIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 import AcquirePlanButton from "./_components/acquire-plan-button";
-import { Badge } from "../_components/ui/badge";
-import { getCurrentMonthTransactions } from "../_data/get-current-month-transactions";
 
 const SubscriptionPage = async () => {
   try {
     const authResult = await auth();
-    
+
     if (!authResult?.userId) {
       redirect("/login");
     }
 
     const [user, currentMonthTransactions] = await Promise.all([
-      clerkClient.users.getUser(authResult.userId),
-      getCurrentMonthTransactions()
+      clerkClient().users.getUser(authResult.userId),
+      getCurrentMonthTransactions(),
     ]);
 
     const hasPremiumPlan = user.publicMetadata.subscriptionPlan == "premium";
@@ -25,8 +25,10 @@ const SubscriptionPage = async () => {
     return (
       <>
         <Navbar />
-        <div className="space-y-6 p-6">
-          <h1 className="text-2xl font-bold">Assinatura</h1>
+        <div className="space-y-6 p-4 md:p-6">
+          <div className="py-2">
+            <h1 className="text-2xl font-bold">Assinatura</h1>
+          </div>
 
           <div className="flex justify-center gap-6">
             <Card className="w-[450px]">

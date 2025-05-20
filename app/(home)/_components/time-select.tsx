@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select";
+} from "@/shared/components/ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -29,20 +29,20 @@ const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
-  
+
   // Inicializa com um valor garantido
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const urlMonth = searchParams.get("month");
     return urlMonth || currentMonth;
   });
-  
+
   // Executa apenas uma vez na montagem
   useEffect(() => {
     if (!searchParams.get("month")) {
       setSelectedMonth(currentMonth);
       push(`/?month=${currentMonth}`, { scroll: false });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMonthChange = (month: string) => {
@@ -51,14 +51,13 @@ const TimeSelect = () => {
   };
 
   // Garante que sempre teremos um valor para exibir
-  const displayValue = MONTH_OPTIONS.find(option => option.value === selectedMonth)?.label;
+  const displayValue = MONTH_OPTIONS.find(
+    (option) => option.value === selectedMonth,
+  )?.label;
 
   return (
-    <Select
-      value={selectedMonth}
-      onValueChange={handleMonthChange}
-    >
-      <SelectTrigger className="w-[150px] rounded-full">
+    <Select value={selectedMonth} onValueChange={handleMonthChange}>
+      <SelectTrigger className="inline-flex h-10 w-[150px] items-center justify-between rounded-full px-4 font-bold">
         <SelectValue>
           {displayValue || MONTH_OPTIONS[Number(currentMonth) - 1].label}
         </SelectValue>

@@ -6,5 +6,6 @@ declare module 'next' {
     searchParams?: Record<string, string | string[] | undefined>;
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP>;
 }
