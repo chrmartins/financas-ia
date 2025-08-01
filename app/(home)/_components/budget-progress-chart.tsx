@@ -38,7 +38,7 @@ const BudgetProgressChart = ({
         </div>
         <h3 className="text-base font-bold">Orçamento Mensal</h3>
       </div>
-      <CardContent className="flex-1 space-y-6 pb-0">
+      <CardContent className="flex-1 space-y-6">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Orçamento disponível</span>

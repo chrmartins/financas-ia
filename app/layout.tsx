@@ -32,7 +32,7 @@ export default async function RootLayout({
           }}
         >
           <SuppressHydrationWarning>
-            <div className="flex h-full flex-col overflow-hidden">
+            <div className="flex min-h-screen flex-col">
               {children}
             </div>
           </SuppressHydrationWarning>

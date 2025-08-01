@@ -1,5 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import {
+  Card,
   CardContent,
   CardHeader,
   CardTitle,
@@ -51,7 +52,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
   };
 
   return (
-    <ScrollArea className="h-full rounded-md border">
+    <Card className="flex flex-col">
       <CardHeader className="flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <CardTitle className="font-bold">Últimas Transações</CardTitle>
         <Button
@@ -63,48 +64,52 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
           <Link href="/transactions">Ver mais</Link>
         </Button>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {lastTransactions.length > 0 ? (
-          lastTransactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
-                  <Image
-                    src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
-                    height={20}
-                    width={20}
-                    alt={transaction.paymentMethod}
-                  />
-                </div>
-                <div>
-                  <p className="text-sm font-bold">{transaction.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {new Date(transaction.date).toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
+      <CardContent className="flex-1">
+        <ScrollArea className="h-[400px] w-full">
+          <div className="space-y-6 pr-4">
+            {lastTransactions.length > 0 ? (
+              lastTransactions.map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
+                      <Image
+                        src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
+                        height={20}
+                        width={20}
+                        alt={transaction.paymentMethod}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">{transaction.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(transaction.date).toLocaleDateString("pt-BR", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
+                    {getAmountPrefix(transaction)}
+                    {formatCurrency(transaction.amount)}
                   </p>
                 </div>
+              ))
+            ) : (
+              <div className="flex items-center justify-center py-8">
+                <p className="text-sm text-muted-foreground">
+                  Nenhuma transação encontrada
+                </p>
               </div>
-              <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
-                {getAmountPrefix(transaction)}
-                {formatCurrency(transaction.amount)}
-              </p>
-            </div>
-          ))
-        ) : (
-          <div className="flex items-center justify-center py-8">
-            <p className="text-sm text-muted-foreground">
-              Nenhuma transação encontrada
-            </p>
+            )}
           </div>
-        )}
+        </ScrollArea>
       </CardContent>
-    </ScrollArea>
+    </Card>
   );
 };
 

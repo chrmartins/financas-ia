@@ -21,6 +21,18 @@ const AddTransactionButton = ({
 }: AddTransactionButtonProps) => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
+  const handleOpenDialog = () => {
+    setDialogIsOpen(true);
+  };
+
+  const handleSetIsOpen = (isOpen: boolean, success?: boolean) => {
+    setDialogIsOpen(isOpen);
+    if (success) {
+      // Aqui você pode adicionar lógica adicional para quando a transação for criada com sucesso
+      // Por exemplo, mostrar um toast de sucesso
+    }
+  };
+
   return (
     <>
       <TooltipProvider delayDuration={0}>
@@ -28,7 +40,7 @@ const AddTransactionButton = ({
           <TooltipTrigger asChild>
             <Button
               className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 font-bold shadow-md hover:bg-primary/90"
-              onClick={() => setDialogIsOpen(true)}
+              onClick={handleOpenDialog}
               disabled={!userCanAddTransaction}
               size="default"
             >
@@ -62,7 +74,7 @@ const AddTransactionButton = ({
       </TooltipProvider>
       <UpsertTransactionDialog
         isOpen={dialogIsOpen}
-        setIsOpen={setDialogIsOpen}
+        setIsOpen={handleSetIsOpen}
       />
     </>
   );

@@ -103,7 +103,7 @@ const AiReportButton = ({ month, isPremium }: AiReportButtonProps) => {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="inline-flex items-center justify-center rounded-full px-4 py-2 font-bold"
+          className="gap-2 whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 inline-flex items-center justify-center rounded-full px-4 py-2 font-bold"
           disabled={!isPremium}
           onClick={() => {
             setReportIsLoading(false);
@@ -112,7 +112,8 @@ const AiReportButton = ({ month, isPremium }: AiReportButtonProps) => {
           }}
         >
           <BotIcon className="mr-2 h-4 w-4" />
-          <span>Relatório IA {getMonthName(month)}</span>
+          <span className="hidden sm:inline">Relatório IA {getMonthName(month)}</span>
+          <span className="sm:hidden">IA {getMonthName(month)}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[600px]">

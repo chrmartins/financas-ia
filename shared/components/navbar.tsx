@@ -47,37 +47,50 @@ const Navbar = ({ isPremium }: NavbarProps) => {
   );
 
   return (
-    <nav className="flex items-center justify-between border-b border-solid px-4 py-3 md:px-6">
-      {/* Lado Esquerdo: Logo e Links de Navegação (Desktop) */}
-      <div className="flex items-center gap-6 md:gap-12">
-        <div className="flex items-center gap-3 md:gap-4">
-          <BarChart className="text-green-600" size={32} strokeWidth={4} />
-          <h1 className="text-2xl font-bold md:text-4xl">NOControle</h1>
+    <nav className="border-b border-solid px-4 py-3 md:px-6">
+      {/* Layout responsivo unificado */}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
+        {/* Primeira linha: Logo e UserButton */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-4">
+            <BarChart className="text-green-600 md:size-8" size={24} strokeWidth={4} />
+            <h1 className="text-lg font-bold md:text-4xl">NOControle</h1>
+          </div>
+          
+          {/* UserButton - sempre visível */}
+          <div className="flex flex-col items-center gap-1 md:hidden">
+            <UserButton showName={false} />
+            <span
+              className={`text-xs font-semibold ${
+                isPremium ? "text-green-500" : "text-muted-foreground"
+              }`}
+            >
+              {isPremium ? "Premium" : "Básico"}
+            </span>
+          </div>
         </div>
-        {/* Links de navegação - visíveis em todas as telas */}
-        <div className="ml-1 flex items-center pl-1 sm:ml-2 md:ml-4 lg:ml-6">
-          <div className="flex items-center gap-1 sm:gap-3 md:gap-6 lg:gap-8">
-            <NavLinks />
+
+        {/* Segunda linha mobile / Meio desktop: Links de navegação */}
+        <div className="flex justify-center gap-4 md:gap-8">
+          <NavLinks />
+        </div>
+
+        {/* UserButton para desktop */}
+        <div className="hidden md:flex md:items-center md:gap-4">
+          <div className="flex flex-col items-center gap-1">
+            <UserButton showName />
+            <span
+              className={`text-xs font-semibold ${
+                isPremium ? "text-green-500" : "text-muted-foreground"
+              }`}
+            >
+              {isPremium ? "Premium" : "Básico"}
+            </span>
           </div>
         </div>
       </div>
-
-      {/* Lado Direito: UserButton */}
-      <div className="flex items-center gap-4">
-        {/* Botão de usuário */}
-        <div className="flex flex-col items-center gap-1">
-          <UserButton showName />
-          <span
-            className={`text-xs font-semibold ${
-              isPremium ? "text-green-500" : "text-muted-foreground"
-            }`}
-          >
-            {isPremium ? "Premium" : "Básico"}
-          </span>
-        </div>
-      </div>
-    </nav>
-  );
+     </nav>
+   );
 };
 
 export default Navbar;

@@ -25,6 +25,18 @@ import {
     TRANSPORTATION: "Transporte",
     UTILITY: "Utilidades",
   };
+
+  export const TRANSACTION_CATEGORY_COLORS = {
+    EDUCATION: "#8B5CF6", // Purple
+    ENTERTAINMENT: "#EF4444", // Red
+    FOOD: "#F59E0B", // Amber
+    HEALTH: "#10B981", // Emerald
+    HOUSING: "#3B82F6", // Blue
+    OTHER: "#6B7280", // Gray
+    SALARY: "#059669", // Green
+    TRANSPORTATION: "#F97316", // Orange
+    UTILITY: "#8B5CF6", // Purple
+  };
   
   export const TRANSACTION_PAYMENT_METHOD_LABELS = {
     BANK_TRANSFER: "Transferência Bancária",

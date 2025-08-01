@@ -45,12 +45,14 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
   return (
     <>
       <Navbar isPremium={isPremium} />
-      <div className="flex h-full flex-col space-y-6 overflow-hidden p-4 md:p-6">
-        <div className="flex w-full items-center justify-between py-2">
+      <div className="flex flex-col space-y-6 px-4 py-6 md:px-6">
+        <div className="flex w-full flex-col gap-4 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex items-center gap-3">
-            <AiReportButton month={validMonth} isPremium={isPremium} />
-            <TimeSelect />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <AiReportButton month={validMonth} isPremium={isPremium} />
+              <TimeSelect />
+            </div>
             <AddTransactionButton
               userCanAddTransaction={userCanAddTransaction}
             />
@@ -58,14 +60,14 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
         </div>
         <SummaryCards month={month} {...dashboard} />
 
-        <div className="grid h-full grid-cols-1 gap-6 overflow-hidden lg:grid-cols-[2fr,1fr]">
-          <div className="grid h-full grid-cols-1 gap-6 overflow-hidden md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr,1fr]">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <ExpensesPerCategory
+              expensesPerCategory={dashboard.totalExpensePerCategory}
+            />
             <BudgetProgressChart
               depositsTotal={dashboard.depositsTotal}
               expensesTotal={dashboard.expensesTotal}
-            />
-            <ExpensesPerCategory
-              expensesPerCategory={dashboard.totalExpensePerCategory}
             />
           </div>
           <LastTransactions lastTransactions={dashboard.lastTransactions} />

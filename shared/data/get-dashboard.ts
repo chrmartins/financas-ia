@@ -101,9 +101,9 @@ export const getDashboard = async (month: string) => {
     category: category.category,
     totalAmount: Number(category._sum.amount),
     percentageOfTotal:
-      expensesTotal > 0
+      depositsTotal > 0
         ? Math.round(
-            (Number(category._sum.amount) / Number(expensesTotal)) * 100,
+            (Number(category._sum.amount) / Number(depositsTotal)) * 100,
           )
         : 0,
   }));
