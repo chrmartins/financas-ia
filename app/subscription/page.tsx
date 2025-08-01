@@ -16,7 +16,7 @@ const SubscriptionPage = async () => {
     }
 
     const [user, currentMonthTransactions] = await Promise.all([
-      clerkClient().users.getUser(authResult.userId),
+      (await clerkClient()).users.getUser(authResult.userId),
       getCurrentMonthTransactions(),
     ]);
 

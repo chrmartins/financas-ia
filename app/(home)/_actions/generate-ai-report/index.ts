@@ -21,7 +21,7 @@ export const generateAiReport = async (month: string) => {
     throw new Error("Unauthorized");
   }
 
-  const user = await clerkClient().users.getUser(userId);
+  const user = await (await clerkClient()).users.getUser(userId);
   console.log("Plano do usuário:", user.publicMetadata.subscriptionPlan);
 
   // Desativando temporariamente a verificação de plano premium para teste

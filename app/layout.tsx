@@ -26,6 +26,7 @@ export default async function RootLayout({
         suppressHydrationWarning={true}
       >
         <ClerkProvider
+          dynamic
           appearance={{
             baseTheme: dark,
           }}
