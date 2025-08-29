@@ -1,11 +1,17 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
-import { BarChart, Menu, X } from "lucide-react";
+import { BarChart, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { Button } from "./ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 
 interface NavbarProps {
   isPremium?: boolean;
@@ -13,19 +19,13 @@ interface NavbarProps {
 
 const Navbar = ({ isPremium }: NavbarProps) => {
   const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Links de navegação compartilhados
-  const NavLinks = ({ mobile = false, onClick }: { mobile?: boolean; onClick?: () => void }) => (
+  // Links de navegação para desktop
+  const DesktopNavLinks = () => (
     <>
       <Link
         href="/"
-        onClick={onClick}
-        className={`${
-          mobile
-            ? "block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted"
-            : "px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base"
-        } ${
+        className={`px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base ${
           pathname === "/" ? "font-bold text-primary" : "text-muted-foreground"
         }`}
       >
@@ -33,12 +33,7 @@ const Navbar = ({ isPremium }: NavbarProps) => {
       </Link>
       <Link
         href="/transactions"
-        onClick={onClick}
-        className={`${
-          mobile
-            ? "block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted"
-            : "px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base"
-        } ${
+        className={`px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base ${
           pathname === "/transactions"
             ? "font-bold text-primary"
             : "text-muted-foreground"
@@ -48,12 +43,7 @@ const Navbar = ({ isPremium }: NavbarProps) => {
       </Link>
       <Link
         href="/subscription"
-        onClick={onClick}
-        className={`${
-          mobile
-            ? "block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted"
-            : "px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base"
-        } ${
+        className={`px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base ${
           pathname === "/subscription"
             ? "font-bold text-primary"
             : "text-muted-foreground"
@@ -62,6 +52,40 @@ const Navbar = ({ isPremium }: NavbarProps) => {
         Assinatura
       </Link>
     </>
+  );
+
+  // Links de navegação para mobile sidebar
+  const MobileNavLinks = () => (
+    <div className="space-y-4">
+      <Link
+        href="/"
+        className={`block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted ${
+          pathname === "/" ? "font-bold text-primary" : "text-muted-foreground"
+        }`}
+      >
+        Dashboard
+      </Link>
+      <Link
+        href="/transactions"
+        className={`block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted ${
+          pathname === "/transactions"
+            ? "font-bold text-primary"
+            : "text-muted-foreground"
+        }`}
+      >
+        Transações
+      </Link>
+      <Link
+        href="/subscription"
+        className={`block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted ${
+          pathname === "/subscription"
+            ? "font-bold text-primary"
+            : "text-muted-foreground"
+        }`}
+      >
+        Assinatura
+      </Link>
+    </div>
   );
 
   return (
@@ -75,7 +99,7 @@ const Navbar = ({ isPremium }: NavbarProps) => {
 
         {/* Links de navegação - Desktop */}
         <div className="hidden items-center gap-6 md:flex lg:gap-8">
-          <NavLinks />
+          <DesktopNavLinks />
         </div>
 
         {/* Lado Direito */}
@@ -97,36 +121,49 @@ const Navbar = ({ isPremium }: NavbarProps) => {
             <UserButton />
           </div>
 
-          {/* Menu hambúrguer - Mobile */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </Button>
+          {/* Menu hambúrguer - Mobile com Sheet */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden"
+              >
+                <Menu size={20} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[280px] sm:w-[350px]">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <BarChart className="h-6 w-6 text-green-600" strokeWidth={4} />
+                  NOControle
+                </SheetTitle>
+              </SheetHeader>
+              <div className="mt-8">
+                <MobileNavLinks />
+                {/* Status Premium na sidebar */}
+                <div className="mt-8 rounded-lg bg-muted p-4">
+                  <div className="flex items-center gap-2">
+                    <UserButton />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">Minha Conta</span>
+                      <span
+                        className={`text-xs font-semibold ${
+                          isPremium ? "text-green-500" : "text-muted-foreground"
+                        }`}
+                      >
+                        Plano: {isPremium ? "Premium" : "Básico"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
 
-      {/* Menu Mobile */}
-      {isMobileMenuOpen && (
-        <div className="border-b bg-background px-4 py-4 md:hidden">
-          <div className="space-y-2">
-            <NavLinks mobile onClick={() => setIsMobileMenuOpen(false)} />
-            {/* Status Premium no menu mobile */}
-            <div className="mt-4 rounded-lg bg-muted p-3">
-              <span
-                className={`text-sm font-semibold ${
-                  isPremium ? "text-green-500" : "text-muted-foreground"
-                }`}
-              >
-                Plano: {isPremium ? "Premium" : "Básico"}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
+
     </>
   );
 };
