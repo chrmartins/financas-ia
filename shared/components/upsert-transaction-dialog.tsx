@@ -127,15 +127,19 @@ const UpsertTransactionDialog = ({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel className="text-sm font-medium">Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Digite o nome..." {...field} />
+                    <Input 
+                      placeholder="Digite o nome..." 
+                      className="h-10 text-sm"
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,7 +150,7 @@ const UpsertTransactionDialog = ({
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Valor</FormLabel>
+                  <FormLabel className="text-sm font-medium">Valor</FormLabel>
                   <FormControl>
                     <MoneyInput
                       placeholder="Digite o valor..."
@@ -156,6 +160,7 @@ const UpsertTransactionDialog = ({
                       }
                       onBlur={field.onBlur}
                       disabled={field.disabled}
+                      className="h-10 text-sm"
                     />
                   </FormControl>
                   <FormMessage />
@@ -167,14 +172,14 @@ const UpsertTransactionDialog = ({
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tipo</FormLabel>
+                  <FormLabel className="text-sm font-medium">Tipo</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a verified email to display" />
+                      <SelectTrigger className="h-10 text-sm">
+                        <SelectValue placeholder="Selecione o tipo..." />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -194,13 +199,13 @@ const UpsertTransactionDialog = ({
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Categoria</FormLabel>
+                  <FormLabel className="text-sm font-medium">Categoria</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 text-sm">
                         <SelectValue placeholder="Selecione a categoria..." />
                       </SelectTrigger>
                     </FormControl>
@@ -221,13 +226,13 @@ const UpsertTransactionDialog = ({
               name="paymentMethod"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Método de pagamento</FormLabel>
+                  <FormLabel className="text-sm font-medium">Método de pagamento</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 text-sm">
                         <SelectValue placeholder="Selecione um método de pagamento..." />
                       </SelectTrigger>
                     </FormControl>
@@ -248,19 +253,19 @@ const UpsertTransactionDialog = ({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data</FormLabel>
+                  <FormLabel className="text-sm font-medium">Data</FormLabel>
                   <DatePicker value={field.value} onChange={field.onChange} />
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <DialogFooter>
+            <DialogFooter className="flex flex-col gap-2 sm:flex-row sm:gap-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="outline" className="w-full sm:w-auto">
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">
+              <Button type="submit" className="w-full sm:w-auto">
                 {isUpdate ? "Atualizar" : "Adicionar"}
               </Button>
             </DialogFooter>

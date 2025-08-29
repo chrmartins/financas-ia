@@ -1,23 +1,31 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
-import { BarChart } from "lucide-react";
+import { BarChart, Menu, X } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Importar usePathname
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Button } from "./ui/button";
 
 interface NavbarProps {
   isPremium?: boolean;
 }
 
 const Navbar = ({ isPremium }: NavbarProps) => {
-  const pathname = usePathname(); // Obter o pathname atual
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Links de navegação compartilhados com classes responsivas
-  const NavLinks = () => (
+  // Links de navegação compartilhados
+  const NavLinks = ({ mobile = false, onClick }: { mobile?: boolean; onClick?: () => void }) => (
     <>
       <Link
         href="/"
-        className={`block px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base ${
+        onClick={onClick}
+        className={`${
+          mobile
+            ? "block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted"
+            : "px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base"
+        } ${
           pathname === "/" ? "font-bold text-primary" : "text-muted-foreground"
         }`}
       >
@@ -25,7 +33,12 @@ const Navbar = ({ isPremium }: NavbarProps) => {
       </Link>
       <Link
         href="/transactions"
-        className={`block px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base ${
+        onClick={onClick}
+        className={`${
+          mobile
+            ? "block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted"
+            : "px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base"
+        } ${
           pathname === "/transactions"
             ? "font-bold text-primary"
             : "text-muted-foreground"
@@ -35,7 +48,12 @@ const Navbar = ({ isPremium }: NavbarProps) => {
       </Link>
       <Link
         href="/subscription"
-        className={`block px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base ${
+        onClick={onClick}
+        className={`${
+          mobile
+            ? "block w-full rounded-lg px-4 py-3 text-left text-base transition-colors hover:bg-muted"
+            : "px-2 py-2 text-sm transition-colors hover:text-primary md:px-4 md:text-base"
+        } ${
           pathname === "/subscription"
             ? "font-bold text-primary"
             : "text-muted-foreground"
@@ -47,36 +65,69 @@ const Navbar = ({ isPremium }: NavbarProps) => {
   );
 
   return (
-    <nav className="flex items-center justify-between border-b border-solid px-4 py-3 md:px-6">
-      {/* Lado Esquerdo: Logo e Links de Navegação (Desktop) */}
-      <div className="flex items-center gap-6 md:gap-12">
-        <div className="flex items-center gap-3 md:gap-4">
-          <BarChart className="text-green-600" size={32} strokeWidth={4} />
-          <h1 className="text-2xl font-bold md:text-4xl">NOControle</h1>
+    <>
+      <nav className="flex items-center justify-between border-b border-solid px-4 py-3 md:px-6">
+        {/* Logo */}
+         <div className="flex items-center gap-2 md:gap-4">
+           <BarChart className="text-green-600 h-6 w-6 md:h-8 md:w-8" strokeWidth={4} />
+           <h1 className="text-lg font-bold md:text-2xl lg:text-4xl">NOControle</h1>
+         </div>
+
+        {/* Links de navegação - Desktop */}
+        <div className="hidden items-center gap-6 md:flex lg:gap-8">
+          <NavLinks />
         </div>
-        {/* Links de navegação - visíveis em todas as telas */}
-        <div className="ml-1 flex items-center pl-1 sm:ml-2 md:ml-4 lg:ml-6">
-          <div className="flex items-center gap-1 sm:gap-3 md:gap-6 lg:gap-8">
-            <NavLinks />
+
+        {/* Lado Direito */}
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Botão de usuário - Desktop */}
+          <div className="hidden flex-col items-center gap-1 md:flex">
+            <UserButton showName />
+            <span
+              className={`text-xs font-semibold ${
+                isPremium ? "text-green-500" : "text-muted-foreground"
+              }`}
+            >
+              {isPremium ? "Premium" : "Básico"}
+            </span>
+          </div>
+
+          {/* Botão de usuário - Mobile (apenas avatar) */}
+          <div className="md:hidden">
+            <UserButton />
+          </div>
+
+          {/* Menu hambúrguer - Mobile */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </Button>
+        </div>
+      </nav>
+
+      {/* Menu Mobile */}
+      {isMobileMenuOpen && (
+        <div className="border-b bg-background px-4 py-4 md:hidden">
+          <div className="space-y-2">
+            <NavLinks mobile onClick={() => setIsMobileMenuOpen(false)} />
+            {/* Status Premium no menu mobile */}
+            <div className="mt-4 rounded-lg bg-muted p-3">
+              <span
+                className={`text-sm font-semibold ${
+                  isPremium ? "text-green-500" : "text-muted-foreground"
+                }`}
+              >
+                Plano: {isPremium ? "Premium" : "Básico"}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Lado Direito: UserButton */}
-      <div className="flex items-center gap-4">
-        {/* Botão de usuário */}
-        <div className="flex flex-col items-center gap-1">
-          <UserButton showName />
-          <span
-            className={`text-xs font-semibold ${
-              isPremium ? "text-green-500" : "text-muted-foreground"
-            }`}
-          >
-            {isPremium ? "Premium" : "Básico"}
-          </span>
-        </div>
-      </div>
-    </nav>
+      )}
+    </>
   );
 };
 

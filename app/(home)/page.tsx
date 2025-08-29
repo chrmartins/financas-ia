@@ -63,21 +63,28 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
   return (
     <>
       <Navbar isPremium={isPremium} />
-      <div className="flex h-full flex-col space-y-6 overflow-hidden p-4 md:p-6">
-        <div className="flex w-full items-center justify-between py-2">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex items-center gap-3">
-            <AiReportButton month={validMonth} year={validYear} isPremium={isPremium} />
-            <TimeSelect />
+      <div className="flex min-h-screen flex-col space-y-4 p-4 md:space-y-6 md:p-6">
+        {/* Header - Mobile First */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-xl font-bold md:text-2xl">Dashboard</h1>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+            <div className="flex items-center gap-2">
+              <AiReportButton month={validMonth} year={validYear} isPremium={isPremium} />
+              <TimeSelect />
+            </div>
             <AddTransactionButton
               userCanAddTransaction={userCanAddTransaction}
             />
           </div>
         </div>
+
+        {/* Summary Cards */}
         <SummaryCards month={month} {...dashboard} />
 
-        <div className="grid h-full grid-cols-1 gap-6 overflow-hidden lg:grid-cols-[2fr,1fr]">
-          <div className="grid h-full grid-cols-1 gap-6 overflow-hidden md:grid-cols-2">
+        {/* Charts and Transactions - Mobile First Layout */}
+        <div className="flex flex-col gap-4 md:gap-6">
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
             <BudgetProgressChart
               depositsTotal={dashboard.depositsTotal}
               expensesTotal={dashboard.expensesTotal}
@@ -86,7 +93,11 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
               expensesPerCategory={dashboard.totalExpensePerCategory}
             />
           </div>
-          <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          
+          {/* Last Transactions */}
+          <div className="w-full">
+            <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          </div>
         </div>
       </div>
     </>

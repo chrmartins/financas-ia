@@ -13,56 +13,67 @@ import TransactionTypeBadge from "../_components/type-badge";
 export const transactionColumns: ColumnDef<SerializedTransaction>[] = [
   {
     accessorKey: "name",
-    header: () => <span className="font-bold">Nome</span>,
+    header: "Nome",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="font-medium">{transaction.name}</div>
+    ),
   },
   {
     accessorKey: "type",
-    header: () => <span className="text-lg font-bold">Tipo</span>,
+    header: "Tipo",
     cell: ({ row: { original: transaction } }) => (
       <TransactionTypeBadge transaction={transaction} />
     ),
   },
   {
     accessorKey: "category",
-    header: () => <span className="font-bold">Categoria</span>,
-    cell: ({ row: { original: transaction } }) =>
-      TRANSACTION_CATEGORY_LABELS[transaction.category],
+    header: "Categoria",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="text-sm">{transaction.category}</div>
+    ),
   },
   {
     accessorKey: "paymentMethod",
-    header: () => <span className="font-bold">Método de Pagamento</span>,
-    cell: ({ row: { original: transaction } }) =>
-      TRANSACTION_PAYMENT_METHOD_LABELS[transaction.paymentMethod],
+    header: "Pagamento",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="text-sm">{transaction.paymentMethod}</div>
+    ),
   },
   {
     accessorKey: "date",
-    header: () => <span className="font-bold">Data</span>,
-    cell: ({ row: { original: transaction } }) =>
-      new Date(transaction.date).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
+    header: "Data",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="text-sm">
+        {new Date(transaction.date).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
+      </div>
+    ),
   },
   {
     accessorKey: "amount",
-    header: () => <span className="font-bold">Valor</span>,
-    cell: ({ row: { original: transaction } }) =>
-      new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(Number(transaction.amount)),
+    header: "Valor",
+    cell: ({ row: { original: transaction } }) => (
+      <div className={`font-medium ${
+        transaction.type === "EXPENSE" ? "text-red-500" : "text-green-500"
+      }`}>
+        {new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(Number(transaction.amount))}
+      </div>
+    ),
   },
   {
     accessorKey: "actions",
-    header: () => <span className="font-bold">Ações</span>,
-    cell: ({ row: { original: transaction } }) => {
-      return (
-        <div className="space-x-1">
-          <EditTransactionButton transaction={transaction} />
-          <DeleteTransactionButton transaction={transaction} />
-        </div>
-      );
-    },
+    header: "Ações",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="flex gap-1">
+        <EditTransactionButton transaction={transaction} />
+        <DeleteTransactionButton transaction={transaction} />
+      </div>
+    ),
   },
 ];

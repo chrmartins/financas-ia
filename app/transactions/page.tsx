@@ -49,17 +49,24 @@ const TransactionsPage = async () => {
   return (
     <>
       <Navbar />
-      <div className="flex h-[calc(100vh-70px)] flex-col space-y-6 overflow-hidden p-6">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl font-bold">Transações</h1>
+      <div className="flex min-h-screen flex-col space-y-4 p-4 md:space-y-6 md:p-6">
+        {/* Header - Mobile First */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-xl font-bold md:text-2xl">Transações</h1>
           <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
         </div>
-        <ScrollArea className="flex-1 overflow-auto">
-          <DataTable<SerializedTransaction, unknown>
-            columns={transactionColumns}
-            data={serializedTransactions}
-          />
-        </ScrollArea>
+        
+        {/* Table Container - Responsive */}
+        <div className="flex-1 overflow-hidden rounded-lg border">
+          <ScrollArea className="h-[calc(100vh-200px)] w-full">
+            <div className="min-w-full">
+              <DataTable<SerializedTransaction, unknown>
+                columns={transactionColumns}
+                data={serializedTransactions}
+              />
+            </div>
+          </ScrollArea>
+        </div>
       </div>
     </>
   );
