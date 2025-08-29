@@ -36,7 +36,15 @@ const TransactionsPage = async () => {
     }),
   );
 
-  const userCanAddTransaction = await canUserAddTransaction();
+  // Verificar se o usuário pode adicionar transações de forma segura
+  let userCanAddTransaction = false;
+  try {
+    userCanAddTransaction = await canUserAddTransaction();
+  } catch (error) {
+    // Se houver erro de autorização, o usuário não pode adicionar transações
+    console.log("User not authorized to add transactions:", error);
+    userCanAddTransaction = false;
+  }
 
   return (
     <>

@@ -25,51 +25,101 @@ const MONTH_OPTIONS = [
   { value: "12", label: "Dezembro" },
 ];
 
+// Gera opções de anos (últimos 5 anos + próximos 5 anos)
+const generateYearOptions = () => {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let i = currentYear - 5; i <= currentYear + 5; i++) {
+    years.push({ value: String(i), label: String(i) });
+  }
+  return years;
+};
+
+const YEAR_OPTIONS = generateYearOptions();
+
 const TimeSelect = () => {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
+  const currentYear = String(new Date().getFullYear());
 
-  // Inicializa com um valor garantido
+  // Inicializa com valores garantidos
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const urlMonth = searchParams.get("month");
     return urlMonth || currentMonth;
   });
 
+  const [selectedYear, setSelectedYear] = useState(() => {
+    const urlYear = searchParams.get("year");
+    return urlYear || currentYear;
+  });
+
   // Executa apenas uma vez na montagem
   useEffect(() => {
-    if (!searchParams.get("month")) {
-      setSelectedMonth(currentMonth);
-      push(`/?month=${currentMonth}`, { scroll: false });
+    const urlMonth = searchParams.get("month");
+    const urlYear = searchParams.get("year");
+    
+    if (!urlMonth || !urlYear) {
+      const month = urlMonth || currentMonth;
+      const year = urlYear || currentYear;
+      setSelectedMonth(month);
+      setSelectedYear(year);
+      push(`/?month=${month}&year=${year}`, { scroll: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMonthChange = (month: string) => {
     setSelectedMonth(month);
-    push(`/?month=${month}`, { scroll: false });
+    push(`/?month=${month}&year=${selectedYear}`, { scroll: false });
   };
 
-  // Garante que sempre teremos um valor para exibir
-  const displayValue = MONTH_OPTIONS.find(
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year);
+    push(`/?month=${selectedMonth}&year=${year}`, { scroll: false });
+  };
+
+  // Garante que sempre teremos valores para exibir
+  const displayMonthValue = MONTH_OPTIONS.find(
     (option) => option.value === selectedMonth,
   )?.label;
 
+  const displayYearValue = YEAR_OPTIONS.find(
+    (option) => option.value === selectedYear,
+  )?.label;
+
   return (
-    <Select value={selectedMonth} onValueChange={handleMonthChange}>
-      <SelectTrigger className="inline-flex h-10 w-[150px] items-center justify-between rounded-full px-4 font-bold">
-        <SelectValue>
-          {displayValue || MONTH_OPTIONS[Number(currentMonth) - 1].label}
-        </SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        {MONTH_OPTIONS.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="flex gap-2">
+      <Select value={selectedMonth} onValueChange={handleMonthChange}>
+        <SelectTrigger className="inline-flex h-10 w-[150px] items-center justify-between rounded-full px-4 font-bold">
+          <SelectValue>
+            {displayMonthValue || MONTH_OPTIONS[Number(currentMonth) - 1].label}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {MONTH_OPTIONS.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      
+      <Select value={selectedYear} onValueChange={handleYearChange}>
+        <SelectTrigger className="inline-flex h-10 w-[100px] items-center justify-between rounded-full px-4 font-bold">
+          <SelectValue>
+            {displayYearValue || currentYear}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {YEAR_OPTIONS.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

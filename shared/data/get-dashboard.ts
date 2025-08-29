@@ -8,16 +8,16 @@ import {
   TransactionPercentagePerType,
 } from "./get-dashboard-types";
 
-export const getDashboard = async (month: string) => {
+export const getDashboard = async (month: string, year?: string) => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("Unauthorized");
   }
 
-  const currentYear = new Date().getFullYear();
+  const selectedYear = year ? parseInt(year) : new Date().getFullYear();
   const monthNumber = parseInt(month);
-  const startDate = startOfMonth(new Date(currentYear, monthNumber - 1));
-  const endDate = endOfMonth(new Date(currentYear, monthNumber - 1));
+  const startDate = startOfMonth(new Date(selectedYear, monthNumber - 1));
+  const endDate = endOfMonth(new Date(selectedYear, monthNumber - 1));
 
   console.log(
     `Buscando transações de ${startDate.toISOString()} até ${endDate.toISOString()}`,

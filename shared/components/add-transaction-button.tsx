@@ -40,7 +40,22 @@ const AddTransactionButton = ({
               <ArrowDownUpIcon className="ml-2 h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="w-[280px] p-4">
+          <TooltipContent 
+            side="top" 
+            align="center"
+            className="w-[280px] p-4" 
+            style={{
+              backgroundColor: '#111827',
+              color: '#ffffff',
+              border: '2px solid #000000',
+              zIndex: 9999,
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              margin: 0
+            }}
+          >
             {!userCanAddTransaction && (
               <div className="text-center">
                 <p className="font-semibold">Limite de transações atingido</p>

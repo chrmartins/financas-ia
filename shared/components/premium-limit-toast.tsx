@@ -13,5 +13,6 @@ export function showPremiumLimitToast() {
       </a>
     ),
     duration: 5000,
+    variant: "warning",
   });
 }

@@ -22,6 +22,7 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
   const searchParams = await props.searchParams;
 
   const month = searchParams.month as string;
+  const year = searchParams.year as string;
   const authResult = await auth();
 
   if (!authResult?.userId) {
@@ -29,17 +30,34 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
   }
 
   const currentMonth = new Date().getMonth() + 1;
+  const currentYear = new Date().getFullYear();
+  
   const validMonth =
     month && isMatch(month, "MM")
       ? month
       : currentMonth.toString().padStart(2, "0");
+      
+  const validYear =
+    year && /^\d{4}$/.test(year)
+      ? year
+      : currentYear.toString();
 
-  if (!month || !isMatch(month, "MM")) {
-    redirect(`?month=${validMonth}`);
+  if (!month || !isMatch(month, "MM") || !year || !/^\d{4}$/.test(year)) {
+    redirect(`?month=${validMonth}&year=${validYear}`);
   }
 
-  const dashboard = await getDashboard(validMonth);
-  const userCanAddTransaction = await canUserAddTransaction();
+  const dashboard = await getDashboard(validMonth, validYear);
+  
+  // Verificar se o usuário pode adicionar transações de forma segura
+  let userCanAddTransaction = false;
+  try {
+    userCanAddTransaction = await canUserAddTransaction();
+  } catch (error) {
+    // Se houver erro de autorização, o usuário não pode adicionar transações
+    console.log("User not authorized to add transactions:", error);
+    userCanAddTransaction = false;
+  }
+  
   const isPremium = true;
 
   return (
@@ -49,7 +67,7 @@ export default async function Home(props: { searchParams: SearchParamsType }) {
         <div className="flex w-full items-center justify-between py-2">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="flex items-center gap-3">
-            <AiReportButton month={validMonth} isPremium={isPremium} />
+            <AiReportButton month={validMonth} year={validYear} isPremium={isPremium} />
             <TimeSelect />
             <AddTransactionButton
               userCanAddTransaction={userCanAddTransaction}

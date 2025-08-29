@@ -4,7 +4,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { endOfMonth, isMatch, startOfMonth } from "date-fns";
 import OpenAI from "openai";
 
-export const generateAiReport = async (month: string) => {
+export const generateAiReport = async (month: string, year?: string) => {
   console.log("generateAiReport iniciado para mês:", month);
 
   if (!isMatch(month, "MM")) {
@@ -21,7 +21,7 @@ export const generateAiReport = async (month: string) => {
     throw new Error("Unauthorized");
   }
 
-  const user = await clerkClient().users.getUser(userId);
+  const user = await (await clerkClient()).users.getUser(userId);
   console.log("Plano do usuário:", user.publicMetadata.subscriptionPlan);
 
   // Desativando temporariamente a verificação de plano premium para teste
@@ -39,18 +39,21 @@ export const generateAiReport = async (month: string) => {
   );
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  // Buscar transações tanto do ano atual quanto do anterior
-  const currentYear = new Date().getFullYear();
+  // Obter o ano (usar o fornecido ou o atual)
+  const targetYear = year ? parseInt(year, 10) : new Date().getFullYear();
+  if (year && (isNaN(targetYear) || targetYear < 1900 || targetYear > 2100)) {
+    throw new Error("Ano inválido");
+  }
 
   // Log para debug
-  console.log("Ano atual:", currentYear);
+  console.log("Ano solicitado:", targetYear);
   console.log("Mês selecionado:", month, "Mês numérico:", monthNum);
 
-  // Primeiro, tentamos buscar as transações do ano atual
+  // Primeiro, tentamos buscar as transações do ano especificado
   const startDateCurrentYear = startOfMonth(
-    new Date(`${currentYear}-${month}-01`),
+    new Date(`${targetYear}-${month}-01`),
   );
-  const endDateCurrentYear = endOfMonth(new Date(`${currentYear}-${month}-01`));
+  const endDateCurrentYear = endOfMonth(new Date(`${targetYear}-${month}-01`));
 
   console.log(
     "Buscando transações (ano atual) de",
@@ -74,11 +77,11 @@ export const generateAiReport = async (month: string) => {
     transactionsCurrentYear.length,
   );
 
-  // Se não encontrou transações no ano atual, busca também no ano anterior
+  // Se não encontrou transações no ano especificado, busca também no ano anterior
   let transactions = transactionsCurrentYear;
 
   if (transactionsCurrentYear.length === 0) {
-    const previousYear = currentYear - 1;
+    const previousYear = targetYear - 1;
     console.log("Tentando buscar transações no ano anterior:", previousYear);
 
     const startDatePreviousYear = startOfMonth(

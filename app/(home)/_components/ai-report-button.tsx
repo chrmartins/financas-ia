@@ -19,6 +19,7 @@ import { generateAiReport } from "../_actions/generate-ai-report/";
 
 interface AiReportButtonProps {
   month: string;
+  year: string;
   isPremium: boolean;
 }
 
@@ -44,7 +45,7 @@ const getMonthName = (month: string): string => {
     : "";
 };
 
-const AiReportButton = ({ month, isPremium }: AiReportButtonProps) => {
+const AiReportButton = ({ month, year, isPremium }: AiReportButtonProps) => {
   const [reportIsLoading, setReportIsLoading] = useState(false);
   const [report, setReport] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +69,7 @@ const AiReportButton = ({ month, isPremium }: AiReportButtonProps) => {
         await new Promise((resolve) => setTimeout(resolve, 500));
       }
 
-      const report = await generateAiReport(month);
+      const report = await generateAiReport(month, year);
 
       console.log(
         "Relatório recebido com sucesso:",
