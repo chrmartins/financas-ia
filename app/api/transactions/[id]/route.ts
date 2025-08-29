@@ -1,11 +1,8 @@
 import { prisma } from "@/shared/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: Request) {
   try {
     const { userId } = await auth();
 
@@ -13,10 +10,15 @@ export async function DELETE(
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
 
+    // Extrair id da URL
+    const url = new URL(request.url);
+    const segments = url.pathname.split("/");
+    const id = segments[segments.length - 1];
+
     // Verificar se a transação pertence ao usuário logado
     const transaction = await prisma.transaction.findUnique({
       where: {
-        id: params.id,
+        id,
       },
     });
 
@@ -32,11 +34,7 @@ export async function DELETE(
     }
 
     // Excluir a transação
-    await prisma.transaction.delete({
-      where: {
-        id: params.id,
-      },
-    });
+    await prisma.transaction.delete({ where: { id } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
